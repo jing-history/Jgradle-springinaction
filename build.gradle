@@ -1,0 +1,172 @@
+apply plugin: 'java'
+apply plugin: 'maven'       //添加 Maven 插件, 可以实现基本所有的 Maven 配置
+apply plugin: 'idea'
+
+sourceCompatibility = 1.6   //最低兼容版本 JDK1.5
+targetCompatibility = 1.8   //目标兼容版本 JDK1.7
+
+allprojects{
+    group 'tk.jingzing.gg'
+    version '1.0-SNAPSHOT'
+
+    repositories {
+        mavenLocal()
+        jcenter()
+        maven { url 'http://repo.spring.io/milestone' }
+        maven { url 'http://repo.spring.io/snapshot' }
+        maven { url 'https://repository.jboss.org/nexus/content/repositories/releases' }
+        maven { url 'https://oss.sonatype.org/content/repositories/releases' }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+        maven { url 'http://repo.maven.apache.org/maven2' }
+    }
+}
+
+configure(subprojects){
+    apply plugin: 'java'
+    apply plugin: 'maven'       //添加 Maven 插件, 可以实现基本所有的 Maven 配置
+    apply plugin: 'idea'
+
+//定义版本号
+    ext {
+        JODA_VERSION = '1.6.2'
+        SPRING_VERSION = '3.0.5.RELEASE'
+    }
+
+   /* sourceSets{
+        main{
+            java{srcDir "src/main/java"}
+            resources{srcDir "src/main/resources"}
+        }
+        test{
+            java{srcDir "src/test/java"}
+            resources{srcDir "src/test/resources"}
+        }
+    }*/
+
+    dependencies {
+        compile fileTree(dir:'/Users/wangyunjing/work/JingZing/green/gradleSpace/Jgradle-springinaction/libs',include:['*.jar'])  //Gradle加载本地jar包
+        compile 'log4j:log4j:1.2.15'
+        compile 'javax.inject:javax.inject:1'
+        testCompile "junit:junit:4.7"
+        testCompile "org.mockito:mockito-all:1.8.5"
+        testCompile "org.springframework:spring-test:${SPRING_VERSION}"
+
+    }
+}
+project('spitter-domain-plain') {
+    description = 'Spitter Domain (Plain...no JPA)'
+    dependencies {}
+}
+project('spitter-domain-jpa') {
+    description = 'Spitter Domain JPA-Annotated'
+    dependencies {
+        compile "javax.persistence:persistence-api:1.0"
+        compile "javax.validation:validation-api:1.0.0.GA"
+        compile "commons-lang:commons-lang:2.4"
+        compile "org.codehaus.jackson:jackson-core-asl:1.6.3"
+        compile "org.springframework:spring-context:${SPRING_VERSION}"
+    }
+}
+project('spitter-persistence-common') {
+    description = 'Spitter Persistence Commons'
+    dependencies {
+        compile project(':spitter-domain-jpa')
+    }
+}
+project('spitter-persistence-jdbc-conventional') {
+    description = 'Spitter Persistence (Traditional)'
+    dependencies {
+        compile project(':spitter-domain-plain')
+        compile project(':spitter-persistence-common')
+    }
+}
+project('spitter-persistence-jdbc-template') {
+    description = 'Spitter Persistence (JDBC Template)'
+    dependencies {
+        compile "org.springframework:spring-jdbc:${SPRING_VERSION}"
+        compile "joda-time:joda-time:${JODA_VERSION}"
+        compile project(':spitter-domain-plain')
+        compile project(':spitter-persistence-common')
+        testCompile "com.h2database:h2:1.2.143"
+    }
+}
+project('spitter-persistence-jdbc-dao-support') {
+    description = 'Spitter Persistence (JDBC DAO Support)'
+    dependencies {
+        compile "org.springframework:spring-jdbc:${SPRING_VERSION}"
+        compile "joda-time:joda-time:${JODA_VERSION}"
+        compile project(':spitter-domain-plain')
+        compile project(':spitter-persistence-common')
+        testCompile "com.h2database:h2:1.2.143"
+    }
+}
+project('spitter-persistence-jpa') {
+    description = 'Spitter Persistence (Commons JPA)'
+    dependencies {
+        compile project(':spitter-domain-jpa')
+        compile project(':spitter-persistence-common')
+        compile "org.springframework:spring-orm:${SPRING_VERSION}"
+        compile "org.hibernate:hibernate-core:3.3.2.GA"
+        compile "org.hibernate:hibernate-entitymanager:3.4.0.GA"
+        compile "com.h2database:h2:1.2.143"
+        compile "cglib:cglib-nodep:2.2"
+        compile "org.slf4j:slf4j-api:1.6.1"
+        compile "javax.persistence:persistence-api:1.0"
+        compile "org.slf4j:slf4j-api:1.5.8"
+        compile "org.slf4j:slf4j-nop:1.5.8"
+    }
+}
+project('spitter-service-common') {
+    description = 'Spitter Service Commons'
+    dependencies {
+        compile project(':spitter-domain-jpa')
+    }
+}
+project('spitter-service-annotation-tx') {
+    description = 'Spitter Service (Annotated Transactions)'
+    dependencies {
+        compile project(':spitter-domain-jpa')
+        compile project(':spitter-service-common')
+        compile project(':spitter-persistence-common')
+        compile "org.springframework:spring-tx:${SPRING_VERSION}"
+        testCompile "org.easymock:easymock:3.0"
+    }
+}
+project('spitter-jmx') {
+    description = 'Spitter JMX'
+    dependencies {
+        compile project(':spitter-domain-jpa')
+        compile "org.springframework:spring-context:${SPRING_VERSION}"
+        compile "org.springframework:spring-web:${SPRING_VERSION}"
+    }
+}
+project('spitter-web') {
+    apply plugin: 'jetty'
+    apply plugin: 'war'
+    description = 'Spitter Web'
+    dependencies {
+        compile project(':spitter-domain-jpa')
+        compile project(':spitter-jmx')
+        compile project(':spitter-persistence-common')
+        compile project(':spitter-persistence-jpa')
+        compile project(':spitter-service-common')
+        compile project(':spitter-service-annotation-tx')
+        compile "org.springframework:spring-webmvc:${SPRING_VERSION}"
+        compile "rome:rome:0.9"
+        compile "net.java.dev.jets3t:jets3t:0.7.4"
+    //    compile ("javax.servlet:servlet-api:2.5") { provider = true }
+    //    providedCompile("javax.servlet:javax.servlet-api:2.5")
+        runtime "javax.servlet:javax.servlet-api:3.1.0"
+        compile "org.springframework.security:spring-security-core:3.0.3.RELEASE"
+        compile "org.springframework.security:spring-security-web:3.0.3.RELEASE"
+        compile "org.springframework.security:spring-security-config:3.0.3.RELEASE"
+        compile "org.springframework.security:spring-security-taglibs:3.0.3.RELEASE"
+        compile "org.springframework.security:spring-security-ldap:3.0.3.RELEASE"
+     //   compile ("org.apache.directory.server:apacheds-core:1.5.5") { optional=true }
+     //   compile ("org.apache.directory.server:apacheds-server-jndi:1.5.5") { optional=true }
+        compile "commons-fileupload:commons-fileupload:1.2.1"
+        compile "org.hibernate:hibernate-validator:4.0.2.GA"
+        compile "org.apache.tiles:tiles-core:2.2.2"
+        compile "org.apache.tiles:tiles-jsp:2.2.2"
+    }
+}

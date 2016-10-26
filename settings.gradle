@@ -1,0 +1,13 @@
+rootProject.name = 'Jgradle-springinaction'
+
+include 'spitter-domain-plain'
+include 'spitter-domain-jpa'
+include 'spitter-persistence-common'
+include 'spitter-persistence-jdbc-conventional'
+include 'spitter-persistence-jdbc-template'
+include 'spitter-persistence-jdbc-dao-support'
+include 'spitter-service-common'
+include 'spitter-service-annotation-tx'
+include 'spitter-jmx'
+include 'spitter-persistence-jpa'
+include 'spitter-web'
