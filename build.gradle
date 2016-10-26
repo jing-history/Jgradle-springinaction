@@ -2,6 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'       //添加 Maven 插件, 可以实现基本所有的 Maven 配置
 apply plugin: 'idea'
 
+
 sourceCompatibility = 1.6   //最低兼容版本 JDK1.5
 targetCompatibility = 1.8   //目标兼容版本 JDK1.7
 
@@ -50,9 +51,30 @@ configure(subprojects){
         testCompile "junit:junit:4.7"
         testCompile "org.mockito:mockito-all:1.8.5"
         testCompile "org.springframework:spring-test:${SPRING_VERSION}"
-
     }
 }
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.bluepapa32:gradle-watch-plugin:0.1.5'
+    }
+}
+
+apply plugin: 'com.bluepapa32.watch'
+watch {
+    java {
+        files files('src/main/java')
+        tasks 'compileJava'
+    }
+    resources {
+        files fileTree(dir: 'src/main/resources', include: '**/*.xml')
+        tasks 'processResources'
+    }
+}
+
 project('spitter-domain-plain') {
     description = 'Spitter Domain (Plain...no JPA)'
     dependencies {}
