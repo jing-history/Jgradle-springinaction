@@ -168,5 +168,7 @@ project('spitter-web') {
         compile "org.hibernate:hibernate-validator:4.0.2.GA"
         compile "org.apache.tiles:tiles-core:2.2.2"
         compile "org.apache.tiles:tiles-jsp:2.2.2"
+        compile "jstl:jstl:1.2"
+        compile "taglibs:standard:1.1.2"
     }
 }

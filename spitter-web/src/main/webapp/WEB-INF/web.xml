@@ -4,6 +4,22 @@
          version="2.4"
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
                    http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    <!--
+        Spring web ???xml ?????jar ???,????classpath: ??,
+        ????????????????????????,??????????web?????????
+        /WEB-INF/spitter-security.xml
+    -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath:service-context.xml
+            classpath:persistence-context.xml
+            classpath:dataSource-context.xml
+        </param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
     <!--<start id="servlet_DispatcherServlet"/>-->
     <servlet>
         <servlet-name>spitter</servlet-name>
