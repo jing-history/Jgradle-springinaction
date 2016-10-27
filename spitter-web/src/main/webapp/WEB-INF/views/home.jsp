@@ -9,7 +9,7 @@
     <h3>Look at what these people are spitting right now...</h3>
     <ol class="spittle-list">
         <c:forEach var="spittle" items="${spittles}">
-            <s:url value="/spitter/spittles"
+            <s:url value="/spitters/spittles"
                    var="spitter_url" >    <!--<co id="cp_spitter_url"/>-->
                 <s:param name="spitterName"
                          value="${spittle.spitter.username}" />
