@@ -34,6 +34,7 @@ public class SpitterController {
         return "spitters/edit";
     }
 
+    //bug model 验证没有起效果 晕死,类型要form 表单类型
     @RequestMapping(method = RequestMethod.POST)
     public String addSpitterFromForm(@Valid Spitter spitter, BindingResult bindingResult){
         if(bindingResult.hasErrors()){

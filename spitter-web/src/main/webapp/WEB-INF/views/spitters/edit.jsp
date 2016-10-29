@@ -2,7 +2,7 @@
 <di>
     <h2>Create a free Spitter account</h2>
     <!-- 标签的path 属性,它引用的是表单所绑定的Spitter对象属性 -->
-    <sf:form method="post" modelAttribute="spitter" enctype="multipart/form-data">
+    <sf:form method="post" modelAttribute="spitter">
         <fieleset>
             <table cellspacing="0">
                 <tr>
