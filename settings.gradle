@@ -11,3 +11,7 @@ include 'spitter-service-annotation-tx'
 include 'spitter-jmx'
 include 'spitter-persistence-jpa'
 include 'spitter-web'
+
+include 'remoting-rmi'
+include 'remoting-clients'
+include 'remoting-jaxws'

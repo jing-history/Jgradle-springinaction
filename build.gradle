@@ -194,3 +194,28 @@ project('spitter-web') {
         compile "taglibs:standard:1.1.2"
     }
 }
+project('remoting-rmi') {
+    description = 'Spitter Remoting (RMI)'
+    dependencies {
+        compile project(':spitter-domain-jpa')
+        compile project(':spitter-service-common')
+        compile "org.springframework:spring-context:${SPRING_VERSION}"
+    }
+}
+project('remoting-clients') {
+    description = 'Spitter Remoting (Clients)'
+    dependencies {
+        compile project(':spitter-domain-jpa')
+        compile project(':spitter-service-common')
+        compile "org.springframework:spring-web:${SPRING_VERSION}"
+    }
+}
+project('remoting-jaxws') {
+    description = 'Spitter Remoting (JAX-WS)'
+    dependencies {
+        compile project(':spitter-domain-jpa')
+        compile project(':spitter-service-common')
+        compile "org.springframework:spring-web:${SPRING_VERSION}"
+        compile "javax.xml:jaxrpc-api:1.1"
+    }
+}

@@ -28,6 +28,8 @@
             </list>
         </property>
     </bean>
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+          p:maxUploadSize="500000"/>
     <!--<start id="mvc_resources"/>-->
     <mvc:resources mapping="/resources/**" location="/resources/" />
     <!--<end id="mvc_resources"/>-->

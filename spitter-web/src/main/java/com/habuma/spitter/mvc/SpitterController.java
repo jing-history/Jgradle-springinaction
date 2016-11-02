@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -36,12 +37,33 @@ public class SpitterController {
 
     //bug model 验证没有起效果 晕死,类型要form 表单类型
     @RequestMapping(method = RequestMethod.POST)
-    public String addSpitterFromForm(@Valid Spitter spitter, BindingResult bindingResult){
+    public String addSpitterFromForm(@Valid Spitter spitter, BindingResult bindingResult,
+                                     @RequestParam(value = "image",required = false)MultipartFile image){
         if(bindingResult.hasErrors()){
             return "spitters/edit";
         }
         spitterService.saveSpitter(spitter);
+        try{
+            if(!image.isEmpty()){
+                validateImage(image);
+
+                saveImage(spitter.getId() + ".jpg",image);
+            }
+        }catch (Exception e){
+            bindingResult.reject(e.getMessage());
+            return "spitters/edit";
+        }
         return "redirect:/spitters/" + spitter.getUsername();
+    }
+
+    private void saveImage(String filename, MultipartFile image) {
+
+    }
+
+    private void validateImage(MultipartFile image) throws Exception {
+        if(!image.getContentType().equals("image/jpeg")){
+            throw  new Exception("only jpg images accepted");
+        }
     }
 
     @RequestMapping(value = "/{username}",method = RequestMethod.GET)
