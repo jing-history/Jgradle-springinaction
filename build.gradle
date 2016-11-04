@@ -219,3 +219,23 @@ project('remoting-jaxws') {
         compile "javax.xml:jaxrpc-api:1.1"
     }
 }
+project('jms') {
+    description = 'Spitter JMS'
+    dependencies {
+        compile project(':spitter-domain-jpa')
+        compile "org.springframework:spring-jms:${SPRING_VERSION}"
+        compile "org.apache.activemq:activemq-core:5.3.0"
+        compile "org.apache.xbean:xbean-spring:3.5"
+    }
+}
+project('jms-rpc'){
+    description = 'Spitter JMS-RPC'
+    dependencies {
+        compile project(':spitter-domain-jpa')
+        compile "org.springframework:spring-context-support:${SPRING_VERSION}"
+        compile "org.springframework:spring-jms:${SPRING_VERSION}"
+        compile "javax.mail:mail:1.4.1"
+        compile "org.apache.activemq:activemq-core:5.3.0"
+        compile "org.apache.xbean:xbean-spring:3.5"
+    }
+}
